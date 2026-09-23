@@ -34,11 +34,7 @@ export function topSkills(users, count = 3) {
         .map(([name, people]) => ({ name, people }))
         .sort((a, b) => b.people - a.people || a.name.localeCompare(b.name));
 
-    if (ranked.length <= count) {
-        return ranked;
-    }
-    const cutoff = ranked[count - 1].people;
-    return ranked.filter((skill) => skill.people >= cutoff);
+    return ranked.slice(0, count);
 }
 
 /**
