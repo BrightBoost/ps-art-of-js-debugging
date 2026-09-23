@@ -125,7 +125,7 @@ select {
     letter-spacing: 2px;
 }
 
-.badge {
+.skill-card .badge {
     align-self: flex-start;
     background-color: var(--muted);
     color: var(--primary-dark);
