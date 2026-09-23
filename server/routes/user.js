@@ -43,11 +43,7 @@ userRouter.post('/skills', requireLogin, async (req, res) => {
     if (!name) {
         return res.status(400).json({ status: 'fail', message: 'name is required' });
     }
-    const numericLevel = Number(level);
-    if (!Number.isInteger(numericLevel) || numericLevel < 1 || numericLevel > 5) {
-        return res.status(400).json({ status: 'fail', message: 'level must be a whole number from 1 to 5' });
-    }
-    await data.addSkill(currentUserId(req), { name, level: numericLevel, category: category || 'Other' });
+    await data.addSkill(currentUserId(req), { name, level, category: category || 'Other' });
     res.status(201).json({ status: 'success', message: 'Skill added successfully' });
 });
 
