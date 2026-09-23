@@ -24,8 +24,6 @@ export async function initStore() {
 }
 
 /**
- * Older skills were saved with "group" instead of "category".
- * Normalize them when reading, so the rest of the app only sees one shape.
  * @param {any} skill
  * @returns {Skill}
  */
@@ -33,7 +31,7 @@ function normalizeSkill(skill) {
     return {
         name: skill.name,
         level: skill.level,
-        category: skill.category ?? skill.group ?? 'Other',
+        category: skill.category,
     };
 }
 
