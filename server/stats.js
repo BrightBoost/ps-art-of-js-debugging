@@ -10,7 +10,7 @@ export const EXPERT_LEVEL = 5;
 export function summarizeSkills(skills) {
     return {
         total: skills.length,
-        experts: skills.filter((skill) => skill.level === EXPERT_LEVEL).length,
+        experts: skills.filter((skill) => skill.levl === EXPERT_LEVEL).length,
     };
 }
 

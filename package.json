@@ -12,9 +12,9 @@
     "dev:server": "node --watch server/app.js",
     "dev:client": "vite",
     "build": "npm run build:server && npm run build:client",
-    "build:server": "esbuild server/app.js --bundle --platform=node --format=esm --packages=external --sourcemap --outfile=dist/server.js",
+    "build:server": "esbuild server/app.js --bundle --platform=node --format=esm --packages=external --outfile=dist/server.js",
     "build:client": "vite build",
-    "start:dist": "node --enable-source-maps dist/server.js",
+    "start:dist": "node dist/server.js",
     "test": "node --test"
   },
   "dependencies": {
