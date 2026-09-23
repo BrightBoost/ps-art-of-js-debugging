@@ -91,6 +91,11 @@
           "name": "SQL",
           "level": 3,
           "category": "Data"
+        },
+        {
+          "name": "Rust",
+          "level": 6,
+          "category": "Programming"
         }
       ]
     }
