@@ -18,7 +18,7 @@ let userCount = 0;
 export async function initStore() {
     const data = await readUsersData();
     if (data.users) {
-        userCount = data.users.length;
+        let userCount = data.users.length;
     }
     console.log(`Loaded ${userCount} users`);
 }
@@ -41,7 +41,7 @@ function normalizeSkill(skill) {
 async function readUsersData() {
     const raw = await readFile(usersFile, 'utf8');
     const data = JSON.parse(raw);
-    data.users = data.users.map((/** @type {any} */ user) => ({
+    data.users = data.members.map((/** @type {any} */ user) => ({
         ...user,
         skills: user.skills.map(normalizeSkill),
     }));
