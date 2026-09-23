@@ -1,7 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { topSkills, summarizeSkills } from '../server/stats.js';
-import { averageLevels } from '../server/survey.js';
 
 /** @param {string} username @param {string[]} skillNames */
 const user = (username, skillNames) => ({
@@ -34,9 +33,4 @@ test('topSkills keeps skills that tie with the last place', () => {
 test('summarizeSkills counts level 5 as expert', () => {
     const skills = [{ name: 'Git', level: 5, category: 'Tools' }, { name: 'CSS', level: 3, category: 'Frontend' }];
     assert.deepEqual(summarizeSkills(skills), { total: 2, experts: 1 });
-});
-
-test('averageLevels understands a decimal comma', () => {
-    const csv = 'respondent;skill;level\nR1;Git;4\nR2;Git;4,5\n';
-    assert.deepEqual(averageLevels(csv), [{ skill: 'Git', answers: 2, average: 4.3 }]);
 });

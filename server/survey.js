@@ -9,7 +9,7 @@ const surveyFile = fileURLToPath(new URL('../data/import/team-survey.csv', impor
  * @param {string} text
  */
 export function parseLevel(text) {
-    return Number(text.trim().replace(',', '.'));
+    return Number(text.trim());
 }
 
 /**
