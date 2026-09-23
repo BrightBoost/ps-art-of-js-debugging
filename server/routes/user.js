@@ -28,7 +28,7 @@ userRouter.post('/logout', (req, res) => {
 // Get the skills of the logged-in user
 userRouter.get('/skills', requireLogin, async (req, res) => {
     const skills = await data.getSkills(currentUserId(req));
-    res.json({ status: 'success', skills });
+    res.json({ status: 'success', data: skills });
 });
 
 // Short summary for the top of the skills page
