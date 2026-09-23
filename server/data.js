@@ -60,25 +60,16 @@ async function backupUsersData() {
 }
 
 // Every change is "read the file, change it, write it back".
-// If two requests do that at the same time, one of them can overwrite the other.
-// This tiny queue makes sure changes happen one after the other.
-/** @type {Promise<unknown>} */
-let queue = Promise.resolve();
-
 /**
  * @template T
  * @param {(data: { users: User[] }) => T | Promise<T>} change
  * @returns {Promise<T>}
  */
-function updateUsersData(change) {
-    const run = queue.then(async () => {
-        const data = await readUsersData();
-        const result = await change(data);
-        await writeUsersData(data);
-        return result;
-    });
-    queue = run.catch(() => {});
-    return run;
+async function updateUsersData(change) {
+    const data = await readUsersData();
+    const result = await change(data);
+    await writeUsersData(data);
+    return result;
 }
 
 export async function getAllUsers() {
