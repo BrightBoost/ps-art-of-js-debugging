@@ -7,11 +7,8 @@ import { initStore } from './data.js';
 
 const app = express();
 
-// Only our own frontend may call this API from the browser, with cookies.
-app.use(cors({
-    origin: 'http://localhost:5173',
-    credentials: true,
-}));
+// Enable Cross-Origin Resource Sharing (CORS)
+app.use(cors());
 
 // Use sessions
 app.use(session({
