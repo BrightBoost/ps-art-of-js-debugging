@@ -6,12 +6,36 @@
       "password": "password1",
       "isAdmin": false,
       "skills": [
-        "JavaScript",
-        "HTML",
-        "CSS",
-        "Python",
-        "Testing",
-        "Working"
+        {
+          "name": "JavaScript",
+          "level": 5,
+          "category": "Programming"
+        },
+        {
+          "name": "HTML",
+          "level": 4,
+          "category": "Frontend"
+        },
+        {
+          "name": "CSS",
+          "level": 3,
+          "category": "Frontend"
+        },
+        {
+          "name": "Python",
+          "level": 4,
+          "category": "Programming"
+        },
+        {
+          "name": "Testing",
+          "level": 2,
+          "category": "Quality"
+        },
+        {
+          "name": "Git",
+          "level": 3,
+          "category": "Tools"
+        }
       ]
     },
     {
@@ -20,8 +44,21 @@
       "password": "password2",
       "isAdmin": false,
       "skills": [
-        "Python",
-        "Data Analysis"
+        {
+          "name": "Python",
+          "level": 5,
+          "group": "Programming"
+        },
+        {
+          "name": "Data Analysis",
+          "level": 4,
+          "group": "Data"
+        },
+        {
+          "name": "SQL",
+          "level": 3,
+          "group": "Data"
+        }
       ]
     },
     {
@@ -30,9 +67,31 @@
       "password": "admin",
       "isAdmin": true,
       "skills": [
-        "JavaScript",
-        "Python",
-        "Project Management"
+        {
+          "name": "JavaScript",
+          "level": 4,
+          "category": "Programming"
+        },
+        {
+          "name": "Python",
+          "level": 3,
+          "category": "Programming"
+        },
+        {
+          "name": "Git",
+          "level": 5,
+          "category": "Tools"
+        },
+        {
+          "name": "Project Management",
+          "level": 4,
+          "category": "Soft skills"
+        },
+        {
+          "name": "SQL",
+          "level": 3,
+          "category": "Data"
+        }
       ]
     }
   ]

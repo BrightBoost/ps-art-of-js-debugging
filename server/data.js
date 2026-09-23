@@ -1,99 +1,176 @@
-const fs = require('fs');
-const path = require('path');
+import { readFile, writeFile, mkdir, copyFile } from 'node:fs/promises';
+import { fileURLToPath } from 'node:url';
 
-// Path to your users.json file
-const usersFilePath = path.join(__dirname, '../data/users.json');
+// We don't use a real database: all data lives in a JSON file.
+// That keeps the app easy to run and easy to follow along with.
+const usersFile = fileURLToPath(new URL('../data/users.json', import.meta.url));
+const nextIdFile = fileURLToPath(new URL('../data/nextId.json', import.meta.url));
+const backupDir = fileURLToPath(new URL('../data/backup/', import.meta.url));
 
-// Path to new id file
-const newUserIdFile = path.join(__dirname, '../data/nextId.json');
+/**
+ * @typedef {{ name: string, level: number, category: string }} Skill
+ * @typedef {{ id: number, username: string, password: string, isAdmin: boolean, skills: Skill[] }} User
+ */
 
+let userCount = 0;
 
-// Read users data from users.json
-function readUsersData() {
-    const usersData = fs.readFileSync(usersFilePath);
-    return JSON.parse(usersData);
+/** Read the data file once at startup, so we fail fast if something is off. */
+export async function initStore() {
+    const data = await readUsersData();
+    if (data.users) {
+        userCount = data.users.length;
+    }
+    console.log(`Loaded ${userCount} users`);
 }
 
-// Write users data to users.json
-function writeUsersData(users) {
-    const usersData = JSON.stringify(users, null, 2);
-    fs.writeFileSync(usersFilePath, usersData);
+/**
+ * Older skills were saved with "group" instead of "category".
+ * Normalize them when reading, so the rest of the app only sees one shape.
+ * @param {any} skill
+ * @returns {Skill}
+ */
+function normalizeSkill(skill) {
+    return {
+        name: skill.name,
+        level: skill.level,
+        category: skill.category ?? skill.group ?? 'Other',
+    };
 }
 
-// Get all users and their skills
-function getAllUsers() {
-    const usersData = readUsersData();
-    return usersData.users;
+/** @returns {Promise<{ users: User[] }>} */
+async function readUsersData() {
+    const raw = await readFile(usersFile, 'utf8');
+    const data = JSON.parse(raw);
+    data.users = data.users.map((/** @type {any} */ user) => ({
+        ...user,
+        skills: user.skills.map(normalizeSkill),
+    }));
+    return data;
 }
 
-// Get new Id and increase Id
-function getNextUserId() {
-    // Read the file to find the next value for id
-    const nextIdData = JSON.parse(fs.readFileSync(newUserIdFile));
-    // Increment this by one after assigning the next value to id (so if it 3, 3 gets assigned to id and 4 is the new value of userId)
-    let id = nextIdData.userId++;
-    // Write the new value to the file
-    fs.writeFileSync(newUserIdFile, JSON.stringify(nextIdData));
+/** @param {{ users: User[] }} data */
+async function writeUsersData(data) {
+    await writeFile(usersFile, JSON.stringify(data, null, 2));
+    await backupUsersData();
+}
+
+async function backupUsersData() {
+    await mkdir(backupDir, { recursive: true });
+    await copyFile(usersFile, `${backupDir}users-${Date.now()}.json`);
+}
+
+// Every change is "read the file, change it, write it back".
+// If two requests do that at the same time, one of them can overwrite the other.
+// This tiny queue makes sure changes happen one after the other.
+/** @type {Promise<unknown>} */
+let queue = Promise.resolve();
+
+/**
+ * @template T
+ * @param {(data: { users: User[] }) => T | Promise<T>} change
+ * @returns {Promise<T>}
+ */
+function updateUsersData(change) {
+    const run = queue.then(async () => {
+        const data = await readUsersData();
+        const result = await change(data);
+        await writeUsersData(data);
+        return result;
+    });
+    queue = run.catch(() => {});
+    return run;
+}
+
+export async function getAllUsers() {
+    const data = await readUsersData();
+    return data.users;
+}
+
+async function getNextUserId() {
+    const nextIdData = JSON.parse(await readFile(nextIdFile, 'utf8'));
+    const id = nextIdData.userId++;
+    await writeFile(nextIdFile, JSON.stringify(nextIdData));
     return id;
 }
 
-// Add a new user
-function addUser(username, password, isAdmin=false) {
-    let id = getNextUserId();
-    const usersData = readUsersData();
-    const newUser = { id, username, password, isAdmin, skills: [] };
-    usersData.users.push(newUser);
-    writeUsersData(usersData);
-    return newUser;
+/**
+ * @param {string} username
+ * @param {string} password
+ */
+export async function addUser(username, password, isAdmin = false) {
+    const id = await getNextUserId();
+    return updateUsersData((data) => {
+        /** @type {User} */
+        const newUser = { id, username, password, isAdmin, skills: [] };
+        data.users.push(newUser);
+        return newUser;
+    });
 }
 
-// Remove a user
-function removeUser(userId) {
-    const usersData = readUsersData();
-    usersData.users = usersData.users.filter(user => user.id !== userId);
-    writeUsersData(users);
+/** @param {number} userId */
+export async function removeUser(userId) {
+    return updateUsersData((data) => {
+        data.users = data.users.filter((user) => user.id !== userId);
+    });
 }
 
-// Get a user
-function getUser(username, password) {
-    const usersData = readUsersData();
-    return usersData.users.find(user => user.username === username && user.password === password);
+/**
+ * Not how you would do this in a real application!
+ * @param {string} username
+ * @param {string} password
+ */
+export async function getUser(username, password) {
+    const data = await readUsersData();
+    return data.users.find((user) => user.username === username && user.password === password);
 }
 
-// Get the skills of a user
-function getSkills(userId) {
-    console.log("Getting skills for user with id: " + userId);
-    const usersData = readUsersData();
-    const user = usersData.users.find(user => user.id == userId);
+/** @param {number} userId */
+export async function getSkills(userId) {
+    const data = await readUsersData();
+    const user = data.users.find((user) => user.id === userId);
     return user ? user.skills : null;
 }
 
-// Add a skill to a user
-function addSkill(userId, skill) {
-    const usersData = readUsersData();
-    const user = usersData.users.find(user => user.id == userId);
-    if (user) {
-        user.skills.push(skill);
-        writeUsersData(usersData);
-    }
+/**
+ * @param {number} userId
+ * @param {Skill} skill
+ */
+export async function addSkill(userId, skill) {
+    return updateUsersData((data) => {
+        const user = data.users.find((user) => user.id === userId);
+        if (user) {
+            user.skills.push(skill);
+        }
+        return user;
+    });
 }
 
-// Remove a skill from a user
-function removeSkill(userId, skill) {
-    const usersData = readUsersData();
-    const user = usersData.users.find(user => user.id === userId);
-    if (user) {
-        user.skills = user.skills.filter(userSkill => userSkill !== skill);
-        writeUsersData(usersData);
-    }
+/**
+ * @param {number} userId
+ * @param {string} skillName
+ * @param {number} level
+ */
+export async function updateSkillLevel(userId, skillName, level) {
+    return updateUsersData((data) => {
+        const skill = data.users
+            .find((user) => user.id === userId)
+            ?.skills.find((skill) => skill.name === skillName);
+        if (skill) {
+            skill.level = level;
+        }
+        return skill;
+    });
 }
 
-module.exports = {
-    getAllUsers,
-    addUser,
-    removeUser,
-    getUser,
-    getSkills,
-    addSkill,
-    removeSkill
-};
+/**
+ * @param {number} userId
+ * @param {string} skillName
+ */
+export async function removeSkill(userId, skillName) {
+    return updateUsersData((data) => {
+        const user = data.users.find((user) => user.id === userId);
+        if (user) {
+            user.skills = user.skills.filter((skill) => skill.name !== skillName);
+        }
+    });
+}

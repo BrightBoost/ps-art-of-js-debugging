@@ -1,4 +1,8 @@
-.vscode
+.vscode/*
+!.vscode/launch.json
+
+# Backups written by the app
+data/backup/
 
 # Logs
 logs

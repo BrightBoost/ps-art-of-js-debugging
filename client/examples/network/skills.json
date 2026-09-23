@@ -1,0 +1,9 @@
+{
+  "skills": [
+    { "name": "JavaScript", "level": 4 },
+    { "name": "Python", "level": 3 },
+    { "name": "CSS", "level": 3 },
+    { "name": "Docker", "level": 2 },
+    { "name": "Git", "level": 5 }
+  ]
+}

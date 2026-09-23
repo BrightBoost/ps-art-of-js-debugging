@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles.css">
+    <title>Admin Page</title>
+</head>
+<body>
+    <nav id="navbar">
+        <a href="/skillList.html">My Skills</a>
+        <a href="/skillForm.html">Add Skill</a>
+        <button id="logout" type="button">Logout</button>
+    </nav>
+
+    <main>
+        <h1>Admin Page</h1>
+
+        <section id="user-management">
+            <h2>Team members</h2>
+            <label for="skill-filter">Filter by skill:</label>
+            <input type="search" id="skill-filter" placeholder="e.g. Python">
+            <ul id="users-list"></ul>
+
+            <form id="user-form">
+                <h3>Add user</h3>
+                <label for="new-username">Username:</label>
+                <input type="text" id="new-username" name="username" required>
+                <label for="new-password">Password:</label>
+                <input type="password" id="new-password" name="password" required>
+                <button class="btn" type="submit">Add User</button>
+            </form>
+        </section>
+
+        <section id="team-insights">
+            <h2>Top skills in the team</h2>
+            <ol id="top-skills"></ol>
+
+            <h2>Team survey</h2>
+            <button id="load-survey" class="btn" type="button">Load survey results</button>
+            <table id="survey-results"></table>
+
+            <h2>Export</h2>
+            <a href="/api/admin/export" download>Download all skills (CSV)</a>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 SkillsApp. All rights reserved.</p>
+    </footer>
+
+    <script type="module" src="/js/admin.js"></script>
+</body>
+</html>

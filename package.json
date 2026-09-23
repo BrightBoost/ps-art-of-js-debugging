@@ -1,24 +1,34 @@
 {
   "name": "skills-app",
-  "version": "1.0.0",
-  "description": "A simple Node.js application to manage skills",
-  "main": "app.js",
+  "version": "2.0.0",
+  "description": "A small skills app used to practice debugging JavaScript, front to back",
+  "type": "module",
+  "private": true,
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
-    "start": "node server/app.js"
+    "dev": "concurrently -n api,web -c blue,magenta \"npm:dev:server\" \"npm:dev:client\"",
+    "dev:server": "node --watch server/app.js",
+    "dev:client": "vite",
+    "build": "npm run build:server && npm run build:client",
+    "build:server": "esbuild server/app.js --bundle --platform=node --format=esm --packages=external --sourcemap --outfile=dist/server.js",
+    "build:client": "vite build",
+    "start:dist": "node --enable-source-maps dist/server.js",
+    "test": "node --test"
   },
-  "keywords": [
-    "node.js",
-    "express",
-    "skills"
-  ],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
-    "body-parser": "^1.19.0",
-    "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
-    "express": "^4.17.1",
-    "express-session": "^1.17.3"
+    "express": "^5.1.0",
+    "express-session": "^1.18.1"
   },
-  "proxy": "localhost:3000"
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/express-session": "^1.19.0",
+    "@types/node": "^22.20.4",
+    "concurrently": "^9.2.0",
+    "esbuild": "^0.25.0",
+    "vite": "^7.0.0"
+  }
 }

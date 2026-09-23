@@ -1,0 +1,184 @@
+:root {
+    --primary-light: #FF1675;
+    --primary-dark: #130F25;
+    --secondary-blue: #00A3FF;
+    --secondary-purple: #770EF7;
+    --secondary-yellow: #FFC942;
+    --secondary-orange: #FF7B01;
+    --card-background: #221B3F;
+    --muted: #9C95BD;
+    --success: #1BC47D;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--primary-dark);
+    color: var(--primary-light);
+    font-family: system-ui, Arial, sans-serif;
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    padding: 20px;
+    flex: 1;
+}
+
+h1, h2, h3 {
+    color: var(--secondary-blue);
+}
+
+nav {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--secondary-purple);
+}
+
+nav #logout {
+    margin-left: auto;
+}
+
+a {
+    color: var(--secondary-orange);
+}
+
+a:hover {
+    color: var(--primary-light);
+}
+
+button,
+.btn {
+    background-color: var(--secondary-purple);
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    font: inherit;
+}
+
+button:hover {
+    background-color: var(--secondary-yellow);
+    color: var(--primary-dark);
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: wait;
+}
+
+form {
+    display: grid;
+    gap: 8px;
+    max-width: 360px;
+}
+
+input,
+select {
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid var(--secondary-purple);
+    font: inherit;
+}
+
+/* Skill cards */
+.skills-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+    margin: 20px 0;
+}
+
+.skill-card {
+    background-color: var(--card-background);
+    border-radius: 8px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: box-shadow 0.3s;
+}
+
+.skill-card h3 {
+    margin: 0;
+}
+
+.skill-card.is-new {
+    box-shadow: 0 0 0 3px var(--secondary-yellow);
+}
+
+.category {
+    color: var(--muted);
+    margin: 0;
+}
+
+.stars {
+    color: var(--secondary-yellow);
+    margin: 0;
+    letter-spacing: 2px;
+}
+
+.badge {
+    align-self: flex-start;
+    background-color: var(--muted);
+    color: var(--primary-dark);
+    border-radius: 999px;
+    padding: 2px 10px;
+    font-size: 0.85rem;
+}
+
+.badge--high {
+    background-color: var(--success);
+}
+
+.level-input {
+    width: 4em;
+    margin-left: 8px;
+}
+
+.delete-button {
+    background-color: transparent;
+    border: 1px solid var(--primary-light);
+    color: var(--primary-light);
+}
+
+/* Loading spinner */
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid var(--card-background);
+    border-top-color: var(--primary-light);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+.spinner[hidden] {
+    display: none;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+table {
+    border-collapse: collapse;
+    margin: 12px 0;
+}
+
+td, th {
+    padding: 4px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--card-background);
+}
+
+footer {
+    padding: 12px 20px;
+    color: var(--muted);
+}

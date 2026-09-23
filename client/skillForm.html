@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles.css">
+    <title>Add Skill</title>
+</head>
+<body>
+    <nav id="navbar">
+        <a href="/skillList.html">My Skills</a>
+        <a href="/skillForm.html">Add Skill</a>
+        <button id="logout" type="button">Logout</button>
+    </nav>
+
+    <main>
+        <form id="add-skill-form">
+            <h2>Add Skill</h2>
+            <label for="skill-name">Skill name:</label>
+            <input type="text" id="skill-name" name="name" required>
+            <label for="skill-level">Level:</label>
+            <select id="skill-level" name="level">
+                <option value="1">1 - Beginner</option>
+                <option value="2">2</option>
+                <option value="3" selected>3 - Comfortable</option>
+                <option value="4">4</option>
+                <option value="5">5 - Expert</option>
+            </select>
+            <label for="skill-category">Category:</label>
+            <input type="text" id="skill-category" name="category" placeholder="Programming, Tools, ...">
+            <button class="btn" type="submit">Add Skill</button>
+        </form>
+        <div id="message" role="status"></div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 SkillsApp. All rights reserved.</p>
+    </footer>
+
+    <script type="module" src="/js/skillForm.js"></script>
+</body>
+</html>

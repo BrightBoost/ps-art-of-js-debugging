@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles.css">
+    <title>Preferences</title>
+</head>
+<body>
+    <nav><a href="/examples/">Examples</a><span>Preferences</span></nav>
+    <main>
+        <h1>Preferences</h1>
+        <form id="preferences">
+            <label>Sort skills by
+                <select name="sortBy">
+                    <option value="name">Name</option>
+                    <option value="level">Level</option>
+                </select>
+            </label>
+            <label><input type="checkbox" name="compact"> Compact cards</label>
+            <label><input type="checkbox" name="rememberMe"> Remember me on this device</label>
+            <button class="btn" type="submit">Save preferences</button>
+        </form>
+        <p id="status" role="status"></p>
+    </main>
+    <script type="module" src="./app.js"></script>
+</body>
+</html>
