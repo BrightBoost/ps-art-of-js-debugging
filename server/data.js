@@ -51,11 +51,10 @@ async function readUsersData() {
 /** @param {{ users: User[] }} data */
 async function writeUsersData(data) {
     await writeFile(usersFile, JSON.stringify(data, null, 2));
-    await backupUsersData();
+    backupUsersData();
 }
 
 async function backupUsersData() {
-    await mkdir(backupDir, { recursive: true });
     await copyFile(usersFile, `${backupDir}users-${Date.now()}.json`);
 }
 

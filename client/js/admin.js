@@ -28,7 +28,7 @@ async function loadUsers() {
 function renderUsers() {
     const skillFilter = skillFilterInput.value.trim().toLowerCase();
     const visibleUsers = users.filter((user) =>
-        user.skills.some((skill) => skill.name.toLowerCase().includes(skillFilter)),
+        user.skills.some((skill) => skill.name.toLowerCase().includes(skillfitter)),
     );
 
     usersList.innerHTML = '';
