@@ -1,4 +1,3 @@
-import { api } from './api.js';
 import { requireUser, setUpNavbar } from './nav.js';
 
 requireUser();
@@ -20,7 +19,15 @@ addSkillForm.addEventListener('submit', async (event) => {
     // Prevent double submits while the request is on its way
     submitButton.disabled = true;
     try {
-        await api('/api/user/skills', { method: 'POST', json: skill });
+        const response = await fetch('/api/user/skills', {
+            method: 'POST',
+            body: JSON.stringify(skill),
+            credentials: 'include',
+        });
+        const data = await response.json();
+        if (!response.ok) {
+            throw new Error(data.message);
+        }
         window.location.href = `/skillList.html?new=${encodeURIComponent(String(skill.name))}`;
     } catch (error) {
         messageDiv.textContent = error instanceof Error ? error.message : String(error);
