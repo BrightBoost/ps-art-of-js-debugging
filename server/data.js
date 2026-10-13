@@ -67,6 +67,7 @@ async function backupUsersData() {
  */
 async function updateUsersData(change) {
     const data = await readUsersData();
+    await new Promise((resolve) => setTimeout(resolve, 50));
     const result = await change(data);
     await writeUsersData(data);
     return result;
