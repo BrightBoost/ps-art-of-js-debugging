@@ -83,7 +83,7 @@ function createSkillCard(skill) {
     /** @type {HTMLElement} */ (card.querySelector('.category')).textContent = skill.category;
 
     const deleteButton = /** @type {HTMLButtonElement} */ (card.querySelector('.delete-button'));
-    deleteButton.addEventListener('cick', () => deleteSkill(skill.name, card));
+    deleteButton.addEventListener('click', () => deleteSkill(skill.name, card));
     return card;
 }
 
@@ -105,7 +105,7 @@ function highlightNewSkill() {
     if (!card) return;
     card.classList.add('is-new');
     setTimeout(() => {
-        card.remove();
+        card.classList.remove("is-new");
     }, 1500);
 }
 
