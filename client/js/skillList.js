@@ -21,8 +21,11 @@ async function loadPage() {
         renderSkills(skills);
         await renderSummary(skills);
         spinner.hidden = true;
-    } catch {
-        // TODO: show a nice error message
+    } catch (error) {
+        console.error(error);
+        messageDiv.textContent = `Could not load your skills: ${error instanceof Error ? error.message : error}`;
+    } finally {
+        spinner.hidden = true;
     }
 }
 
@@ -49,7 +52,8 @@ async function renderSummary(skills) {
 
 /** @param {number} level */
 function stars(level) {
-    return '★'.repeat(level) + '☆'.repeat(5 - level);
+    const safeLevel = Math.min(Math.max(level, 0), 5);
+    return '★'.repeat(safeLevel) + '☆'.repeat(5 - safeLevel);
 }
 
 /** @param {Skill[]} skills */
@@ -119,11 +123,16 @@ saveButton.addEventListener('click', async () => {
             level: Number(input.value),
         }));
 
-    changes.forEach(async (change) => {
-        await saveLevel(change.name, change.level);
-    });
-    messageDiv.textContent = `All changes saved ✔`;
-    saveButton.disabled = false;
+    try {
+        await Promise.all(changes.map((change) => saveLevel(change.name, change.level)));
+        messageDiv.textContent = `All changes saved ✔`;
+        await loadPage();
+    } catch (error) {
+        console.error(error);
+        messageDiv.textContent = `Not everything was saved: ${error instanceof Error ? error.message : error}`;
+    } finally {
+        saveButton.disabled = false;
+    }
 });
 
 /**

@@ -13,7 +13,7 @@
         },
         {
           "name": "HTML",
-          "level": 4,
+          "level": 5,
           "category": "Frontend"
         },
         {
@@ -47,17 +47,17 @@
         {
           "name": "Python",
           "level": 5,
-          "group": "Programming"
+          "category": "Programming"
         },
         {
           "name": "Data Analysis",
           "level": 4,
-          "group": "Data"
+          "category": "Data"
         },
         {
           "name": "SQL",
           "level": 3,
-          "group": "Data"
+          "category": "Data"
         }
       ]
     },
