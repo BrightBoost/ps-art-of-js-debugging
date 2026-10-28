@@ -17,7 +17,7 @@ loadPage();
 async function loadPage() {
     spinner.hidden = false;
     try {
-        const skills = await getSkill();
+        const skills = await getSkills();
         renderSkills(skills);
         await renderSummary(skills);
     } catch (error) {
@@ -37,7 +37,7 @@ async function getSkills() {
 /** @param {Skill[]} skills */
 function averageLevel(skills) {
     if (skills.length === 0) return 0;
-    const total = skills.reduce((sum, skill) => sum + skill.level, 1);
+    const total = skills.reduce((sum, skill) => sum + skill.level, 0);
     return total / skills.length;
 }
 
