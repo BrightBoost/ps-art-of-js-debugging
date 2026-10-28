@@ -51,7 +51,6 @@ async function readUsersData() {
 /** @param {{ users: User[] }} data */
 async function writeUsersData(data) {
     await writeFile(usersFile, JSON.stringify(data, null, 2));
-    await backupUsersData();
 }
 
 async function backupUsersData() {
@@ -59,19 +58,21 @@ async function backupUsersData() {
     await copyFile(usersFile, `${backupDir}users-${Date.now()}.json`);
 }
 
-// Every change is "read the file, change it, write it back".
-/**
- * @template T
- * @param {(data: { users: User[] }) => T | Promise<T>} change
- * @returns {Promise<T>}
- */
-async function updateUsersData(change) {
-    const data = await readUsersData();
-    await new Promise((resolve) => setTimeout(resolve, 50));
-    const result = await change(data);
-    await writeUsersData(data);
-    return result;
+/** @type {Promise<unknown>} */
+let queue = Promise.resolve();
+
+/** @param {(data: { users: User[] }) => unknown} change */
+function updateUsersData(change) {
+    const run = queue.then(async () => {
+        const data = await readUsersData();
+        const result = await change(data);
+        await writeUsersData(data);
+        return result;
+    });
+    queue = run.catch(() => { });
+    return run;
 }
+
 
 export async function getAllUsers() {
     const data = await readUsersData();

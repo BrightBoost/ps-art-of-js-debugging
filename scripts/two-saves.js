@@ -1,4 +1,4 @@
-// Simulates two people saving a skill at (almost) the same moment.
+// Simulates saving two skills at (almost) the same moment.
 // Usage: start the server, then run: node scripts/two-saves.js
 const BASE = process.env.API_URL ?? 'http://localhost:3000';
 
@@ -19,7 +19,7 @@ function addSkill(name) {
 }
 
 const stamp = Date.now().toString().slice(-4);
-const statuses = await Promise.all([addSkill(`Docker-${stamp}`), addSkill(`Kubernetes-${stamp}`)]);
+const statuses = await Promise.all([addSkill(`Docker-${stamp}`), addSkill(`Podman-${stamp}`)]);
 console.log('Both requests answered with:', statuses);
 
 const skills = await fetch(`${BASE}/api/user/skills`, { headers: { cookie } }).then((r) => r.json());
