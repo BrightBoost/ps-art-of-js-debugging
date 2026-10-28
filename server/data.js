@@ -31,7 +31,8 @@ function normalizeSkill(skill) {
     return {
         name: skill.name,
         level: skill.level,
-        category: skill.category,
+        // Older records stored the category as "group"
+        category: skill.category ?? skill.group ?? 'Other',
     };
 }
 
