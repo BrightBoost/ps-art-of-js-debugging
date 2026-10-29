@@ -23,12 +23,14 @@ function render() {
 // Make all cards as high as the highest card, so the grid looks tidy.
 function equalizeCardHeights() {
     const allCards = /** @type {NodeListOf<HTMLElement>} */ (cards.querySelectorAll('.skill-card'));
-    let maxHeight = 0;
     for (const card of allCards) {
         card.style.height = 'auto';
-        maxHeight = Math.max(maxHeight, card.offsetHeight);
+    }
+    const maxHeight = Math.max(...[...allCards].map((card) => card.offsetHeight));
+    for (const card of allCards) {
         card.style.height = `${maxHeight}px`;
     }
+
 }
 
 filter.addEventListener('input', render);
