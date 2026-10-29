@@ -25,11 +25,11 @@ form.addEventListener('submit', (event) => {
         sortBy: formData.get('sortBy'),
         compact: formData.has('compact'),
     };
-    localStorage.setItem('preferences', preferences);
+    localStorage.setItem('preferences', JSON.stringify(preferences));
 
     if (formData.has('rememberMe')) {
         // Remember the user for 30 days
-        document.cookie = `rememberMe=user1; max-age=${60 * 60 * 24 * 30}; SameSite=None`;
+        document.cookie = `rememberMe=user1; max-age=${60 * 60 * 24 * 30}; SameSite=Lax`;
     } else {
         document.cookie = 'rememberMe=; max-age=0';
     }
