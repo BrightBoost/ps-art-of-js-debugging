@@ -8,7 +8,11 @@ import { initStore } from './data.js';
 const app = express();
 
 // Enable Cross-Origin Resource Sharing (CORS)
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:5173',
+    credentials: true,
+}));
+
 
 // Use sessions
 app.use(session({
